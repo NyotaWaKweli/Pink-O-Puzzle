@@ -1,0 +1,478 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    background: #FFFFFF;
+    color: #1A1A1A;
+}
+#app {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 12px 16px 10px 16px;
+    position: relative;
+}
+
+/* FEN Input Area - Clear on LEFT, Input MIDDLE, Load RIGHT */
+.fen-input-area {
+    flex-shrink: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #EEEEEE;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.fen-input-area .clear-btn {
+    padding: 8px 12px;
+    background: #EEEEEE;
+    color: #666666;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.fen-input-area .clear-btn:hover {
+    background: #DDDDDD;
+    color: #333333;
+}
+.fen-input-area .clear-btn:active {
+    background: #CCCCCC;
+}
+.fen-input-area input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    outline: none;
+    transition: border 0.15s;
+    min-width: 0;
+    background: #FAFAFA;
+}
+.fen-input-area input:focus {
+    border-color: #1A1A1A;
+    background: #FFFFFF;
+}
+.fen-input-area input::placeholder {
+    color: #BBBBBB;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    font-size: 13px;
+}
+.fen-input-area button {
+    padding: 8px 16px;
+    background: #1A1A1A;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.fen-input-area button:hover {
+    background: #333333;
+}
+.fen-input-area button:active {
+    background: #444444;
+}
+
+/* Problem Area - Clear and well-spaced */
+.problem-area {
+    flex-shrink: 0;
+    padding: 10px 0 8px 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+.problem-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1A1A1A;
+    min-height: 28px;
+    font-weight: 500;
+}
+.problem-text .fen-display {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #999999;
+    font-weight: 400;
+    display: block;
+    margin-top: 3px;
+    word-break: break-all;
+}
+.status-message {
+    font-size: 13px;
+    color: #666666;
+    min-height: 22px;
+    margin-top: 2px;
+    padding: 2px 0;
+}
+.status-message.danger {
+    color: #CC4444;
+    font-weight: 500;
+}
+.status-message.success {
+    color: #44AA66;
+    font-weight: 500;
+}
+.status-message.info {
+    color: #1A1A1A;
+}
+
+.captured-pieces {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 4px 0 2px 0;
+    min-height: 32px;
+    align-items: center;
+}
+.captured-pieces .label {
+    font-size: 10px;
+    color: #999999;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+}
+.captured-pieces .captured-piece-img {
+    width: 28px;
+    height: 28px;
+    opacity: 0.6;
+    object-fit: contain;
+}
+
+/* Board Wrapper - Takes all available space */
+.board-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 0;
+    min-height: 0;
+}
+.board-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    line-height: 1;
+    text-align: center;
+    user-select: none;
+    background: #E8E0D8;
+    position: relative;
+}
+.square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    background-color: #F0D9B5;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.square.dark {
+    background-color: #B58863;
+}
+.square.selected {
+    background-color: #7B9D7B !important;
+}
+
+/* Highlight styles */
+.square.highlight-from {
+    background-color: #B8D4E8 !important;
+}
+.square.dark.highlight-from {
+    background-color: #8BB8D4 !important;
+}
+.square.highlight-to {
+    background-color: #4A9BD9 !important;
+}
+.square.dark.highlight-to {
+    background-color: #3A8BC9 !important;
+}
+.square.highlight-from-capture {
+    background-color: #B8E8B8 !important;
+}
+.square.dark.highlight-from-capture {
+    background-color: #8BD48B !important;
+}
+.square.highlight-to-capture {
+    background-color: #44CC66 !important;
+}
+.square.dark.highlight-to-capture {
+    background-color: #33BB55 !important;
+}
+.square.highlight-from-death {
+    background-color: #E8B8B8 !important;
+}
+.square.dark.highlight-from-death {
+    background-color: #D48B8B !important;
+}
+.square.highlight-to-death {
+    background-color: #CC4444 !important;
+}
+.square.dark.highlight-to-death {
+    background-color: #BB3333 !important;
+}
+
+.square .piece-img {
+    pointer-events: none;
+    z-index: 3;
+    position: relative;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+.square .piece-img.moving {
+    animation: pieceMove 0.4s ease-out forwards;
+}
+@keyframes pieceMove {
+    0% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.square .piece-img.captured-burst {
+    animation: capturedBurst 0.6s ease-out forwards;
+}
+@keyframes capturedBurst {
+    0% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(1.6); opacity: 0.9; }
+    100% { transform: scale(0.3); opacity: 0; }
+}
+
+.square .move-dot {
+    position: absolute;
+    width: 28%;
+    height: 28%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    z-index: 2;
+}
+.square.dark .move-dot {
+    background: rgba(255, 255, 255, 0.35);
+}
+.square .capture-ring {
+    position: absolute;
+    inset: 6%;
+    border-radius: 50%;
+    border: 5px solid rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 2;
+    box-sizing: border-box;
+}
+.square.dark .capture-ring {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Footer - Only Pieces, Captured, Moves */
+.footer-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 4px 0;
+    border-top: 1px solid #EEEEEE;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #999999;
+    letter-spacing: 0.3px;
+}
+.footer-bar .footer-item {
+    text-align: center;
+}
+.footer-bar .footer-item .footer-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: #999999;
+    display: block;
+    letter-spacing: 0.5px;
+}
+.footer-bar .footer-item .footer-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1A1A1A;
+    display: block;
+}
+.footer-bar .footer-item .footer-value.danger {
+    color: #CC4444;
+}
+.footer-bar .footer-item .footer-value.success {
+    color: #44AA66;
+}
+
+/* Toast / Popup */
+.toast-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: toastFadeIn 0.2s ease;
+}
+.toast-overlay.active {
+    display: flex;
+}
+@keyframes toastFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.toast-box {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+.toast-box .toast-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1A1A1A;
+}
+.toast-box .toast-message {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333333;
+    margin-bottom: 20px;
+    white-space: pre-line;
+}
+.toast-box .toast-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+.toast-box .toast-actions button {
+    background: #FFFFFF;
+    border: 1px solid #1A1A1A;
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1A1A1A;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    min-width: 80px;
+}
+.toast-box .toast-actions button:hover {
+    background: #F5F5F5;
+}
+.toast-box .toast-actions button.primary {
+    background: #1A1A1A;
+    color: #FFFFFF;
+    border-color: #1A1A1A;
+}
+.toast-box .toast-actions button.primary:hover {
+    background: #333333;
+}
+.toast-box .toast-error-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    line-height: 1;
+    color: #CC4444;
+}
+.toast-box .toast-success-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    line-height: 1;
+    color: #44AA66;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    #app {
+        padding: 8px 12px 6px 12px;
+    }
+    .problem-text {
+        font-size: 12px;
+    }
+    .status-message {
+        font-size: 11px;
+    }
+    .toast-box {
+        padding: 20px;
+    }
+    .fen-input-area input {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+    .fen-input-area input::placeholder {
+        font-size: 11px;
+    }
+    .fen-input-area button {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+    .fen-input-area .clear-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    .square .piece-img {
+        width: 70%;
+        height: 70%;
+    }
+    .captured-pieces .captured-piece-img {
+        width: 22px;
+        height: 22px;
+    }
+    .footer-bar {
+        font-size: 10px;
+    }
+    .footer-bar .footer-item .footer-value {
+        font-size: 14px;
+    }
+}
+@media (min-width: 501px) {
+    #app {
+        padding: 16px 24px 12px 24px;
+        max-width: 560px;
+    }
+    .problem-text {
+        font-size: 15px;
+    }
+    .status-message {
+        font-size: 14px;
+    }
+    .square .piece-img {
+        width: 80%;
+        height: 80%;
+    }
+    .footer-bar .footer-item .footer-value {
+        font-size: 18px;
+    }
+}
