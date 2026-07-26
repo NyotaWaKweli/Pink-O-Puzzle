@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <title>Chess Puzzle - Capture All</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="app">
+        <!-- FEN Input Area - Clear button on LEFT, Input in MIDDLE, Load on RIGHT -->
+        <div class="fen-input-area">
+            <button id="clearBtn" class="clear-btn" title="Clear FEN input">✕</button>
+            <input type="text" id="fenInput" placeholder="Enter the FEN string..." />
+            <button id="loadBtn">Load</button>
+        </div>
+
+        <!-- Problem Area - Clear and well-spaced -->
+        <div class="problem-area">
+            <div class="problem-text" id="problemText">
+                Enter a FEN string and click Load to start.
+                <span class="fen-display" id="fenDisplay">No FEN loaded yet</span>
+            </div>
+            <div class="status-message info" id="statusMessage">Paste a FEN string above and click Load.</div>
+            <div class="captured-pieces" id="capturedPieces">
+                <span class="label">Captured:</span>
+            </div>
+        </div>
+
+        <!-- Board - Takes all available space -->
+        <div class="board-wrapper">
+            <div class="board-container" id="board"></div>
+        </div>
+
+        <!-- Footer - Only Pieces, Captured, Moves -->
+        <div class="footer-bar">
+            <div class="footer-item">
+                <span class="footer-label">Pieces</span>
+                <span class="footer-value" id="piecesLeft">0</span>
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">Captured</span>
+                <span class="footer-value" id="capturedDisplay">0/0</span>
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">Moves</span>
+                <span class="footer-value" id="movesDisplay">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-overlay" id="toastOverlay">
+        <div class="toast-box">
+            <div id="toastIcon" class="toast-error-icon" style="display:none;">⚠</div>
+            <div class="toast-title" id="toastTitle">Game Over</div>
+            <div class="toast-message" id="toastMessage">Your piece was captured!</div>
+            <div class="toast-actions" id="toastActions">
+                <button class="primary" id="toastConfirm">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
